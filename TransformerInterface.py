@@ -19,6 +19,7 @@ class Category(Enum):
 class ModelResponse:
     priority: Priority
     category: Category
+    confidence: float
 
 class Model:
     def __init__(self, *args, **kwargs):
@@ -28,7 +29,7 @@ class Model:
 
     def predict(self, message_text: str) -> ModelResponse:
         """Получает сообщение пользователя и выдаёт ответ, метод возвращает объект с аттрибутами priority и category"""
-        pass
+        return ModelResponse(Priority(2), Category(1), 0.5)  # Бессмысленный ответ
 
 
 # Пример использования
@@ -37,3 +38,4 @@ if __name__ == "__main__":
     response = model.predict("Здравствуйте, заказывал у вас товар месяц назад, всё ещё не доставили")
     print(response.category)
     print(response.priority)
+    print(response.confidence)

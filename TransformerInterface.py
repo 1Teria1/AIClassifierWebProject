@@ -29,3 +29,11 @@ class Model:
     def predict(self, message_text: str) -> ModelResponse:
         """Получает сообщение пользователя и выдаёт ответ, метод возвращает объект с аттрибутами priority и category"""
         pass
+
+
+# Пример использования
+if __name__ == "__main__":
+    model = Model("Некоторые параметры (или их отсутствие)")
+    response = model.predict("Здравствуйте, заказывал у вас товар месяц назад, всё ещё не доставили")
+    print(response.category)
+    print(response.priority)

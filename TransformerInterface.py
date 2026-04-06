@@ -24,7 +24,7 @@ class ModelResponse:
 class Model:
     def __init__(self, *args, **kwargs):
         """В этом методе происходит инициализация модели (загрузка из файла, подготовка к работе)
-        args, kwargs могут быть параметры для модели, пока не знаю какие"""
+        args, kwargs могут быть параметры для модели"""
         object.__init__(self)
 
     def predict(self, message_text: str) -> ModelResponse:

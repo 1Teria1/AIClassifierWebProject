@@ -18,8 +18,8 @@
 
 | Компонент | Технология |
 |-----------|------------|
-| ML-модель | RuBERT (DeepPavlov/rubert-base-cased) |
-| Фреймворк | PyTorch + Hugging Face Transformers |
+| ML-модель | RuBERT |
+| Фреймворк | PyTorch |
 | API | RestAPI на Flask |
 | Интерфейс | HTML/CSS/JavaScript |
 | Контейнеризация | Docker (опционально) |

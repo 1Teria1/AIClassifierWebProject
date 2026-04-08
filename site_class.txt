@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Техподдержка | Классификация запросов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f5fe 0%, #e9f0fa 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .support-card {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #1A2A6C, #b21f1f, #fdbb4d);
+            padding: 1.8rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .header-gradient h1 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-gradient p {
+            font-weight: 400;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .input-label span {
+            background: #eef2ff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #1e40af;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            font-family: 'Inter', monospace;
+            resize: vertical;
+            background: #ffffff;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2rem 0;
+        }
+
+        .classify-btn {
+            background: linear-gradient(100deg, #1e293b, #0f172a);
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .classify-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(100deg, #0f172a, #020617);
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.2);
+        }
+
+        .classify-btn:active {
+            transform: translateY(1px);
+        }
+
+        .classify-btn.loading {
+            opacity: 0.7;
+            cursor: wait;
+            transform: none;
+        }
+
+        .output-section {
+            background: #f8fafd;
+            border-radius: 1.8rem;
+            padding: 1.2rem 1.5rem 1.5rem;
+            border: 1px solid #eef2ff;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 0.7rem;
+        }
+
+        .output-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .badge-icon {
+            background: #d9e6ff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            min-height: 150px;
+        }
+
+        .result-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+            color: #1e293b;
+        }
+
+        .empty-state {
+            color: #94a3b8;
+            text-align: center;
+            padding: 1.5rem;
+            font-style: italic;
+        }
+
+        .error-state {
+            color: #dc2626;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* Примеры запросов */
+        .examples {
+            margin-top: 2rem;
+            background: #ffffffcc;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e9f0f5;
+        }
+
+        .examples p {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .chip {
+            background: #f1f5f9;
+            padding: 0.3rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chip:hover {
+            background: #e0e7ff;
+            border-color: #a5b4fc;
+            transform: scale(0.97);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 1.8rem;
+            font-size: 0.7rem;
+            color: #5b6e8c;
+            border-top: 1px solid #eef2ff;
+            padding-top: 1.2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.25s ease;
+        }
+
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 1.2rem;
+            }
+            .header-gradient h1 {
+                font-size: 1.4rem;
+            }
+            .classify-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="support-card">
+    <div class="header-gradient">
+        <h1>🛠️ Техподдержка</h1>
+        <p>Классификация обращений · Отправьте запрос на анализ</p>
+    </div>
+
+    <div class="main-content">
+        <div class="input-section">
+            <div class="input-label">
+                📝 Текст запроса <span>обязательно</span>
+            </div>
+            <textarea id="requestInput" rows="4" placeholder="Опишите вашу проблему или вопрос..."></textarea>
+        </div>
+
+        <div class="button-wrapper">
+            <button class="classify-btn" id="classifyBtn">
+                📤 Отправить запрос
+                <span>→</span>
+            </button>
+        </div>
+
+        <!-- Примеры запросов -->
+        <div class="examples">
+            <p>📌 Примеры запросов (нажмите для вставки):</p>
+            <div class="example-chips">
+                <div class="chip" data-example="Не могу войти в личный кабинет, пишет ошибка авторизации. Что делать?">🔐 Проблема с входом</div>
+                <div class="chip" data-example="Приложение вылетает сразу после запуска, переустановка не помогла.">🐞 Вылетает / Баг</div>
+                <div class="chip" data-example="С карты списали деньги дважды за одну подписку, верните пожалуйста.">💰 Проблема с оплатой</div>
+                <div class="chip" data-example="Хочу отменить подписку и вернуть деньги за последний месяц.">🔄 Возврат средств</div>
+                <div class="chip" data-example="Как поменять тарифный план? Не могу найти эту опцию в настройках.">⚙️ Вопрос по функционалу</div>
+                <div class="chip" data-example="Спасибо за отличный сервис! Хочу предложить добавить тёмную тему.">💬 Обратная связь</div>
+                <div class="chip" data-example="Не приходит письмо с подтверждением регистрации, проверьте пожалуйста.">📧 Проблема с почтой</div>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <div class="output-header">
+                <h3>📋 Результат классификации</h3>
+                <div class="badge-icon">Ответ сервера</div>
+            </div>
+            <div id="resultContainer" class="result-box">
+                <div class="empty-state">
+                    🔍 Здесь отобразится результат после отправки запроса
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            ⚡ Запрос отправляется на сервер для классификации
+        </div>
+    </div>
+</div>
+
+<script>
+    const textarea = document.getElementById('requestInput');
+    const classifyBtn = document.getElementById('classifyBtn');
+    const resultContainer = document.getElementById('resultContainer');
+
+    // Отображение результата от сервера
+    function displayResult(data) {
+        let html = '';
+        
+        if (typeof data === 'string') {
+            html = `<div class="result-content fade-in">${escapeHtml(data)}</div>`;
+        } else if (data && typeof data === 'object') {
+            html = `<div class="result-content fade-in">
+                        <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+                    </div>`;
+        } else {
+            html = `<div class="result-content fade-in">${escapeHtml(String(data))}</div>`;
+        }
+        
+        resultContainer.innerHTML = html;
+    }
+
+    function displayError(message) {
+        resultContainer.innerHTML = `<div class="error-state fade-in">❌ Ошибка: ${escapeHtml(message)}</div>`;
+    }
+
+    function displayLoading() {
+        resultContainer.innerHTML = `<div class="empty-state fade-in">⏳ Отправка запроса... ожидание ответа от сервера</div>`;
+    }
+
+    function setLoadingState(isLoading) {
+        if (isLoading) {
+            classifyBtn.classList.add('loading');
+            classifyBtn.disabled = true;
+            classifyBtn.innerHTML = '⏳ Отправка... <span>↻</span>';
+        } else {
+            classifyBtn.classList.remove('loading');
+            classifyBtn.disabled = false;
+            classifyBtn.innerHTML = '📤 Отправить запрос <span>→</span>';
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Заполнение примерами
+    function setupExamples() {
+        const chips = document.querySelectorAll('.chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const exampleText = chip.getAttribute('data-example');
+                if (exampleText) {
+                    textarea.value = exampleText;
+                    textarea.focus();
+                    // небольшая анимация для обратной связи
+                    classifyBtn.style.transform = 'scale(1.02)';
+                    setTimeout(() => { classifyBtn.style.transform = ''; }, 150);
+                }
+            });
+        });
+    }
+
+    // Основная функция отправки запроса
+    async function sendRequest() {
+        const query = textarea.value.trim();
+        
+        if (!query) {
+            displayError('Пожалуйста, введите текст запроса');
+            return;
+        }
+
+        setLoadingState(true);
+        displayLoading();
+
+        try {
+            // ⚠️ ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ URL
+            const API_URL = '/api/classify';  // <-- СМЕНИТЕ НА ВАШ URL
+            
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    query: query,
+                    text: query
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            displayResult(data);
+            
+        } catch (error) {
+            console.error('Ошибка:', error);
+            
+            let errorMsg = error.message;
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                errorMsg = 'Не удалось соединиться с сервером. Проверьте, что бэкенд запущен и URL указан верно.';
+            }
+            displayError(`${errorMsg}\n\n💡 Совет: проверьте настройки API_URL в коде (строка ~210)`);
+        } finally {
+            setLoadingState(false);
+        }
+    }
+
+    // Отправка по кнопке
+    classifyBtn.addEventListener('click', sendRequest);
+    
+    // Отправка по Ctrl+Enter (Cmd+Enter)
+    textarea.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            sendRequest();
+        }
+    });
+
+    // Инициализация примеров
+    setupExamples();
+</script>
+</body>
+</html>

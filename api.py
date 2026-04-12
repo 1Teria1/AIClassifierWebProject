@@ -17,7 +17,7 @@ def get_category_ru(category):
         Category.DELIVERY: "Доставка",
         Category.TECH: "Техническая проблема",
         Category.PRODUCT: "Вопрос по товару",
-        Category.SPAM: "Спам"
+        Category.SPAM: "Спам",
     }
     return mapping.get(category, "Неизвестно")
 
@@ -27,7 +27,8 @@ def get_priority_ru(priority):
         Priority.HIGH: "Высокий",
         Priority.MEDIUM: "Средний",
         Priority.LOW: "Низкий",
-        Priority.SPAM: "Спам"
+        Priority.SPAM: "Спам",
+        Priority.CRITICAL: "Критический",
     }
     return mapping.get(priority, "Неизвестно")
 

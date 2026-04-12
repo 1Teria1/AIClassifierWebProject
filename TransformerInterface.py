@@ -7,6 +7,7 @@ class Priority(Enum):
     LOW = 2
     MEDIUM = 3
     HIGH = 4
+    CRITICAL = 5
 
 
 class Category(Enum):

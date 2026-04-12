@@ -8,6 +8,7 @@ class Priority(Enum):
     MEDIUM = 3
     HIGH = 4
 
+
 class Category(Enum):
     PAYMENT = 1
     DELIVERY = 2
@@ -15,11 +16,13 @@ class Category(Enum):
     PRODUCT = 4
     SPAM = 5
 
+
 @dataclass
 class ModelResponse:
     priority: Priority
     category: Category
     confidence: float
+
 
 class Model:
     def __init__(self, *args, **kwargs):

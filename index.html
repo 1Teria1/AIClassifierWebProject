@@ -325,16 +325,15 @@
     // Отображение результата от сервера
     function displayResult(data) {
         let html = '';
-        
-        if (typeof data === 'string') {
-            html = `<div class="result-content fade-in">${escapeHtml(data)}</div>`;
-        } else if (data && typeof data === 'object') {
-            html = `<div class="result-content fade-in">
-                        <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">${escapeHtml(JSON.stringify(data, null, 2))}</pre>
-                    </div>`;
-        } else {
-            html = `<div class="result-content fade-in">${escapeHtml(String(data))}</div>`;
+        function formatResultDataPretty(data) {
+            const lines = [];
+            const confidenceText = data.confidence ? ` (Уверенность модели: ${(data.confidence * 100).toFixed(0)}%)` : '';
+            lines.push(`📂 Категория: ${data.category_ru || data.category}    `);
+            lines.push(`⚡ Приоритет: ${data.priority_ru || data.priority}    ${confidenceText}`);
+
+            return lines.join('\n');
         }
+        html = formatResultDataPretty(data);
         
         resultContainer.innerHTML = html;
     }

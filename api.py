@@ -27,7 +27,6 @@ def get_priority_ru(priority):
         Priority.HIGH: "Высокий",
         Priority.MEDIUM: "Средний",
         Priority.LOW: "Низкий",
-        Priority.SPAM: "Спам",
         Priority.CRITICAL: "Критический",
     }
     return mapping.get(priority, "Неизвестно")

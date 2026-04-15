@@ -3,19 +3,18 @@ from enum import Enum
 
 
 class Priority(Enum):
-    SPAM = 1
-    LOW = 2
-    MEDIUM = 3
-    HIGH = 4
-    CRITICAL = 5
+    LOW = 0
+    MEDIUM = 1
+    HIGH = 2
+    CRITICAL = 3
 
 
 class Category(Enum):
-    PAYMENT = 1
-    DELIVERY = 2
-    TECH = 3
-    PRODUCT = 4
-    SPAM = 5
+    PAYMENT = 0
+    DELIVERY = 1
+    TECH = 2
+    PRODUCT = 3
+    SPAM = 4
 
 
 @dataclass

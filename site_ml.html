@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техническая Поддержка</title>
+    
+    <link rel="icon" type="image/png" href="file:///C:/Users/Sofia/Downloads/ai-assistant.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #0f172a;
+            --text-secondary: #64748b;
+            --border: rgba(226, 232, 240, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.05) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .support-card {
+            max-width: 750px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: cardFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #1A2A6C 0%, #b21f1f 50%, #fdbb4d 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 8s ease infinite;
+            padding: 4rem 2rem; /* Немного увеличил отступы раз нет логотипа */
+            color: white;
+            text-align: center;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header-gradient h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 8px; }
+        .header-gradient p { font-weight: 300; opacity: 0.9; font-size: 1.1rem; }
+
+        .main-content { padding: 3rem; }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        input {
+            width: 100%;
+            padding: 22px 75px 22px 28px;
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #000;
+            color: white;
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover { background: #222; transform: translateY(-50%) scale(1.05); }
+
+        .result-box {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: none;
+            animation: resultSlide 0.5s ease-out forwards;
+        }
+
+        @keyframes resultSlide {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 35px; }
+        .label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; }
+        .value { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+
+        .track {
+            height: 12px;
+            background: linear-gradient(to right, #22c55e, #eab308, #f97316, #ef4444);
+            border-radius: 20px;
+            position: relative;
+            margin-top: 10px;
+        }
+        .thumb {
+            width: 28px;
+            height: 28px;
+            background: #000;
+            border: 5px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .marks { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); }
+
+    </style>
+</head>
+<body>
+
+<div class="support-card">
+    <div class="header-gradient">
+        <h1>Техническая Поддержка</h1>
+        <p>Автоматическая классификация входящих запросов</p>
+    </div>
+
+    <div class="main-content">
+        <div class="input-group">
+            <input type="text" id="userInput" placeholder="Опишите проблему или задайте вопрос.." autocomplete="off">
+            <button class="submit-btn" id="sendBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+
+        <div class="result-box" id="resultArea">
+            <div class="res-grid">
+                <div>
+                    <div class="label">Категория запроса</div>
+                    <div class="value" id="catText">—</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="label">Уровень приоритета</div>
+                    <div class="value" id="prioText">—</div>
+                </div>
+            </div>
+
+            <div class="label" style="text-align: center; margin-bottom: 10px;">Шкала срочности</div>
+            <div class="track">
+                <div class="thumb" id="thumb"></div>
+            </div>
+            <div class="marks">
+                <span>Низкий</span>
+                <span>Средний</span>
+                <span>Высокий</span>
+                <span>Критический</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('userInput');
+    const btn = document.getElementById('sendBtn');
+    const resultArea = document.getElementById('resultArea');
+    const thumb = document.getElementById('thumb');
+    
+    // Списки категорий и названий приоритетов
+    const categories = {
+        1: "Оплата",
+        2: "Доставка",
+        3: "Техническая проблема",
+        4: "Вопрос по товару",
+        5: "Спам / Не по теме"
+    };
+
+    const priorityNames = {
+        1: "Низкий",
+        2: "Средний",
+        3: "Высокий",
+        4: "Критический"
+    };
+
+    function process() {
+        const val = input.value.trim().toLowerCase();
+        if (!val) return;
+
+        let catId = 4;
+        let prio = 2;
+
+        // Логика определения
+        if (val.includes('оплат') || val.includes('деньги') || val.includes('чек')) {
+            catId = 1; prio = 4;
+        } else if (val.includes('достав') || val.includes('заказ') || val.includes('где мой')) {
+            catId = 2; prio = 3;
+        } else if (val.includes('не работает') || val.includes('ошибка') || val.includes('баг')) {
+            catId = 3; prio = 4;
+        } else if (val.includes('выиграли') || val.includes('приз') || val.includes('реклама')) {
+            catId = 5; prio = 1;
+        }
+
+        // Вывод текстовых значений
+        document.getElementById('catText').innerText = categories[catId];
+        document.getElementById('prioText').innerText = priorityNames[prio];
+
+        // Движение слайдера
+        const pos = ((prio - 1) / 3) * 100;
+        thumb.style.left = pos + '%';
+
+        // Показ результата
+        resultArea.style.display = 'block';
+    }
+
+    // Обработка клика
+    btn.addEventListener('click', process);
+
+    // Обработка Enter
+    input.addEventListener('keypress', (e) => { 
+        if (e.key === 'Enter') process(); 
+    });
+</script>
+
+</body>
+</html>

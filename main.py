@@ -36,6 +36,7 @@ def get_priority_ru(priority):
 def predict():
     try:
         data = request.get_json()
+        print(f"Predict: {data}")
         
         if not data or 'text' not in data:
             return jsonify({'error': 'Отсутствует поле text'}), 400
@@ -48,9 +49,9 @@ def predict():
         response = model.predict(message)
         
         result = {
-            'category': response.category.name,
+            'category': response.category.value,
             'category_ru': get_category_ru(response.category),
-            'priority': response.priority.name,
+            'priority': response.priority.value,
             'priority_ru': get_priority_ru(response.priority),
             'confidence': response.confidence
         }
@@ -58,6 +59,7 @@ def predict():
         return jsonify(result), 200
         
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 

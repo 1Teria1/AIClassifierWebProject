@@ -47,7 +47,10 @@ class Category(Enum):
 class ModelResponse:
     priority: Priority
     category: Category
-    confidence: float
+    category_confidence: float
+    priority_confidence: float
+    category_preds: list[float]
+    priority_preds: list[float]
 
 
 class Model:
@@ -66,23 +69,37 @@ class Model:
             message_text,
             return_tensors="pt",
             padding=True,
-            truncation=True
+            truncation=True,
+            max_length=512
         )
         with torch.no_grad():
             category_logits, priority_logits = self.model(**tokenized)
+
         category_probs = torch.softmax(category_logits, dim=-1)
         priority_probs = torch.softmax(priority_logits, dim=-1)
+
         category_pred = torch.argmax(category_probs, dim=-1).item()
         priority_pred = torch.argmax(priority_probs, dim=-1).item()
+
         category_confidence = category_probs[0, category_pred].item()
-        return ModelResponse(Priority(priority_pred), Category(category_pred), category_confidence)
+        priority_confidence = priority_probs[0, priority_pred].item()
+
+        category_probs_list = list(map(lambda x: float(x), category_probs[0]))
+        priority_probs_list = list(map(lambda x: float(x), priority_probs[0]))
+
+        return ModelResponse(Priority(priority_pred), Category(category_pred),
+                             category_confidence, priority_confidence,
+                             category_probs_list, priority_probs_list)
 
 
 # Пример использования
 if __name__ == "__main__":
     print("Загружаем модель...")
     model = Model("Некоторые параметры")
-    response = model.predict("Здравствуйте, заказывал у вас товар месяц назад, всё ещё не доставили")
+    response = model.predict("Здравствуйте")
     print(response.category)
     print(response.priority)
-    print(response.confidence)
+    print(response.category_confidence)
+    print(response.priority_confidence)
+    print(response.category_preds)
+    print(response.priority_preds)

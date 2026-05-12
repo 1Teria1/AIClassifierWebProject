@@ -36,7 +36,6 @@ def get_priority_ru(priority):
 def predict():
     try:
         data = request.get_json()
-        print(f"Predict: {data}")
         
         if not data or 'text' not in data:
             return jsonify({'error': 'Отсутствует поле text'}), 400
@@ -53,7 +52,10 @@ def predict():
             'category_ru': get_category_ru(response.category),
             'priority': response.priority.value,
             'priority_ru': get_priority_ru(response.priority),
-            'confidence': response.confidence
+            'category_confidence': response.category_confidence,
+            'priority_confidence': response.priority_confidence,
+            'priority_preds': response.priority_preds,
+            'category_preds': response.category_preds,
         }
         
         return jsonify(result), 200
@@ -79,4 +81,4 @@ def redirect_to_site():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
